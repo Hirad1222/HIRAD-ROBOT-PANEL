@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090d19">
+<title>HIRAD ROBOT PANEL</title>
+<style>
+:root{--bg:#090d19;--panel:#111a2d;--panel2:#1a2740;--text:#f4f6ff;--muted:#9aa7c0;--border:#293650;--accent:#8067ff}
+body.light{--bg:#f1f4fa;--panel:#fff;--panel2:#edf1f8;--text:#172039;--muted:#68748b;--border:#dce2ed}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Tahoma,Arial,sans-serif}
+button,input,textarea,select{font:inherit}button{cursor:pointer}
+.sidebar{position:fixed;inset:0 0 0 auto;width:240px;background:var(--panel);border-left:1px solid var(--border);padding:20px 14px;z-index:3;overflow:auto}
+.logo{font-weight:bold;font-size:17px;padding:10px 8px 24px;border-bottom:1px solid var(--border)}
+.logo small{display:block;color:var(--muted);font-size:10px;margin-top:7px}
+.navtitle{font-size:10px;color:var(--muted);margin:22px 9px 8px}
+.nav button{width:100%;text-align:right;border:0;background:transparent;color:var(--muted);padding:12px;border-radius:10px;margin:2px 0}
+.nav button.active,.nav button:hover{background:var(--panel2);color:var(--text)}
+.nav button.active{border-right:3px solid var(--accent)}
+main{margin-right:240px;padding:24px;max-width:1500px}
+header{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:22px}
+h2{font-size:19px}h3{font-size:15px;margin-top:0}
+.btn{background:var(--panel);border:1px solid var(--border);color:var(--text);padding:10px 13px;border-radius:10px;font-size:12px}
+.primary{background:var(--accent);border-color:var(--accent);color:white}
+.hero{padding:24px;border-radius:16px;background:linear-gradient(120deg,#292052,#17495f);color:white;margin-bottom:16px}
+.hero p{line-height:2;font-size:12px;color:#e0e6fa}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:17px;min-width:0}
+.muted{color:var(--muted);font-size:11px;line-height:1.9}
+.stat{font-size:24px;font-weight:bold;margin-top:10px}
+.page{display:none}.page.active{display:block}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.row:last-child{border:0}
+input[type=text],input[type=url],input[type=password],textarea,select{width:100%;padding:11px;background:var(--panel2);border:1px solid var(--border);border-radius:9px;color:var(--text);margin:7px 0 13px}
+label{font-size:11px;color:var(--muted)}
+.notice{background:var(--panel2);padding:12px;border-radius:10px;font-size:11px;line-height:2;color:var(--muted);margin:10px 0}
+.switch{width:40px;height:22px;accent-color:var(--accent)}
+.mobile{display:none}
+#toast{position:fixed;bottom:18px;left:18px;background:var(--panel2);border:1px solid var(--border);padding:12px 16px;border-radius:10px;display:none;z-index:8;font-size:12px}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.sidebar{transform:translateX(100%);transition:.2s}.sidebar.open{transform:translateX(0)}main{margin:0;padding:14px}.mobile{display:inline-block}.two{grid-template-columns:1fr}.grid{gap:8px}.card{padding:12px}}
+[dir=ltr] .nav button{text-align:left}[dir=ltr] .nav button.active{border-right:0;border-left:3px solid var(--accent)}
+</style>
+</head>
+<body>
+<aside class="sidebar" id="sidebar">
+ <div class="logo">🛡️ HIRAD ROBOT PANEL<small>ROBOT MANAGEMENT</small></div>
+ <nav class="nav">
+  <div class="navtitle" data-t="main">مدیریت اصلی</div>
+  <button class="active" data-page="dashboard" onclick="page('dashboard',this)">▦ <span data-t="dashboard">داشبورد</span></button>
+  <button data-page="connection" onclick="page('connection',this)">🔌 <span data-t="connection">اتصال سرور</span></button>
+  <button data-page="groups" onclick="page('groups',this)">👥 <span data-t="groups">گروه‌ها</span></button>
+  <div class="navtitle" data-t="security">محافظت</div>
+  <button data-page="guard" onclick="page('guard',this)">🛡️ Guard System</button>
+  <button data-page="welcome" onclick="page('welcome',this)">👋 <span data-t="welcome">خوشامدگویی</span></button>
+  <button data-page="tools" onclick="page('tools',this)">⚡ <span data-t="tools">ابزارها</span></button>
+  <button data-page="analytics" onclick="page('analytics',this)">📊 <span data-t="analytics">گزارش‌ها</span></button>
+  <button data-page="settings" onclick="page('settings',this)">⚙️ <span data-t="settings">تنظیمات</span></button>
+ </nav>
+</aside>
+<main>
+<header>
+ <div style="display:flex;align-items:center;gap:9px"><button class="btn mobile" onclick="$('sidebar').classList.toggle('open')">☰</button><h2 id="title">داشبورد اصلی</h2></div>
+ <div><button class="btn" onclick="theme()">☀️ / 🌙</button> <button class="btn" onclick="language()">FA / EN</button></div>
+</header>
+<section id="dashboard" class="page active">
+ <div class="hero"><b>● <span data-t="ready">رابط کاربری آماده است</span></b><h2>HIRAD ROBOT PANEL</h2><p data-t="hero">مرکز مدیریت، امنیت و هوشمندسازی گروه‌های روبیکا. اتصال واقعی پس از راه‌اندازی Backend فعال می‌شود.</p><button class="btn primary" onclick="page('connection')" data-t="connect">تنظیم اتصال</button></div>
+ <div class="grid">
+  <div class="card">🤖 <div class="muted" data-t="bot">وضعیت ربات</div><div class="stat" id="botState">آماده</div></div>
+  <div class="card">👥 <div class="muted" data-t="groups">گروه‌ها</div><div class="stat" id="groupCount">۰</div></div>
+  <div class="card">🛡️ <div class="muted" data-t="violations">تخلفات</div><div class="stat">—</div></div>
+  <div class="card">⚡ <div class="muted" data-t="messages">پیام‌های بررسی‌شده</div><div class="stat">—</div></div>
+ </div>
+ <h3 style="margin-top:22px" data-t="infra">وضعیت زیرساخت</h3>
+ <div class="two"><div class="card"><div class="row"><b>Frontend</b><span>فعال</span></div><div class="row"><b>Backend API</b><span id="backendState">بررسی نشده</span></div><div class="row"><b>Rubika API</b><span>متصل نیست</span></div></div>
+ <div class="card"><b data-t="quick">دسترسی سریع</b><p class="muted" data-t="quickdesc">تنظیمات پروژه</p><button class="btn" onclick="page('guard')" data-t="guardsettings">تنظیم محافظت</button></div></div>
+</section>
+<section id="connection" class="page"><div class="card"><h3 data-t="connecttitle">اتصال Backend</h3><label>Backend URL</label><input id="apiUrl" type="url" placeholder="https://your-backend.example.com"><label>Panel API Key</label><input id="apiKey" type="password" autocomplete="off" placeholder="کلید محرمانه پنل"><button class="btn primary" onclick="checkApi()" data-t="test">بررسی اتصال</button><div class="notice" id="apiResult">توکن روبیکا را اینجا وارد نکنید. این قسمت فقط برای کلید پنل است.</div></div></section>
+<section id="groups" class="page"><div class="card"><h3 data-t="mygroups">گروه‌های من</h3><button class="btn" onclick="getGroups()" data-t="refresh">دریافت گروه‌ها</button><div id="groupList" class="notice">هنوز گروهی دریافت نشده است. اتصال روبیکا هنوز پیاده‌سازی نشده.</div></div>
+<div class="card" style="margin-top:12px"><h3 data-t="groupconfig">تنظیمات گروه</h3><label>Group ID</label><input id="groupId" type="text" placeholder="شناسه گروه"><label>Settings JSON</label><textarea id="groupJson" rows="7">{ "antiSpam": true, "antiLink": false }</textarea><button class="btn" onclick="loadGroup()">بارگذاری</button> <button class="btn primary" onclick="saveGroup()">ذخیره در سرور</button></div></section>
+<section id="guard" class="page"><div class="card"><h3>Guard System</h3><p class="muted" data-t="guarddesc">این گزینه‌ها تا زمان اتصال Backend فقط در مرورگر ذخیره می‌شوند و هنوز روی گروه‌ها اثری ندارند.</p><div id="guardList"></div><button class="btn primary" onclick="saveGuard()">ذخیره تنظیمات محلی</button></div><div class="card" style="margin-top:12px"><h3 data-t="punishment">سیاست اخطار</h3><label data-t="warncount">تعداد اخطار پیش از اقدام</label><select id="warnCount"><option>2</option><option selected>3</option><option>4</option><option>5</option></select><label data-t="action">اقدام پس از تکرار</label><select id="action"><option value="temporary">بن موقت</option><option value="mute">محدودیت ارسال</option><option value="manual">بررسی مدیر</option></select><button class="btn" onclick="savePolicy()">ذخیره</button></div></section>
+<section id="welcome" class="page"><div class="card"><h3 data-t="welcometitle">پیام‌های ورود و خروج</h3><label data-t="welcomeMsg">پیام خوشامدگویی</label><input id="welcomeText" type="text" value="سلام {name} عزیز! خوش آمدی 🌹"><label data-t="byeMsg">پیام خروج</label><input id="byeText" type="text" value="{name} از گروه خارج شد."><button class="btn primary" onclick="saveWelcome()" data-t="save">ذخیره</button><div class="notice" data-t="localonly">فعلاً تنظیمات محلی هستند؛ پس از اتصال Backend ذخیره سروری اضافه می‌شود.</div></div></section>
+<section id="tools" class="page"><div class="grid"><div class="card">💵<h3 data-t="currency">قیمت ارز</h3><p class="muted">نیازمند منبع داده معتبر</p></div><div class="card">🥇<h3 data-t="gold">قیمت طلا</h3><p class="muted">نیازمند منبع داده معتبر</p></div><div class="card">🕒<h3 data-t="clock">ساعت</h3><b id="clock"></b></div><div class="card">📅<h3 data-t="date">تاریخ</h3><b id="date"></b></div></div></section>
+<section id="analytics" class="page"><div class="card"><h3 data-t="analytics">گزارش‌ها</h3><p class="muted" data-t="analyticsdesc">گزارش واقعی پس از اتصال سرویس‌ها در دسترس خواهد بود.</p></div></section>
+<section id="settings" class="page"><div class="card"><h3 data-t="settings">تنظیمات</h3><label data-t="language">زبان</label><select id="lang" onchange="setLang(this.value)"><option value="fa">فارسی</option><option value="en">English</option></select><button class="btn" onclick="theme()" data-t="theme">تغییر پوسته</button></div></section>
+<p class="muted" style="text-align:center;margin-top:28px">HIRAD ROBOT PANEL • v2.1</p>
+</main><div id="toast"></div>
+<script>
+const $=id=>document.getElementById(id);
+const keys=["antiSpam","antiFlood","antiLink","antiAds","antiProfanity","antiForward","antiMention","antiEmoji","joinFlood","adminProtect"];
+const names={fa:["ضداسپم","ضدفلوود","ضدلینک","ضدتبلیغات","ضدفحش","ضدفوروارد","ضدمنشن","ایموجی تکراری","ورود انبوه","محافظت مدیران"],en:["Anti-spam","Anti-flood","Anti-link","Anti-ads","Profanity filter","Anti-forward","Anti-mention","Repeated emoji","Join flood","Admin protection"]};
+const T={
+fa:{main:"مدیریت اصلی",dashboard:"داشبورد",connection:"اتصال سرور",groups:"گروه‌ها",security:"محافظت",welcome:"خوشامدگویی",tools:"ابزارها",analytics:"گزارش‌ها",settings:"تنظیمات",ready:"رابط کاربری آماده است",hero:"مرکز مدیریت، امنیت و هوشمندسازی گروه‌های روبیکا. اتصال واقعی پس از راه‌اندازی Backend فعال می‌شود.",connect:"تنظیم اتصال",bot:"وضعیت ربات",violations:"تخلفات",messages:"پیام‌های بررسی‌شده",infra:"وضعیت زیرساخت",quick:"دسترسی سریع",quickdesc:"تنظیمات پروژه",guardsettings:"تنظیم محافظت",connecttitle:"اتصال Backend",test:"بررسی اتصال",mygroups:"گروه‌های من",refresh:"دریافت گروه‌ها",groupconfig:"تنظیمات گروه",guarddesc:"این گزینه‌ها تا زمان اتصال Backend فقط در مرورگر ذخیره می‌شوند و هنوز روی گروه‌ها اثری ندارند.",punishment:"سیاست اخطار",warncount:"تعداد اخطار پیش از اقدام",action:"اقدام پس از تکرار",welcometitle:"پیام‌های ورود و خروج",welcomeMsg:"پیام خوشامدگویی",byeMsg:"پیام خروج",save:"ذخیره",localonly:"فعلاً تنظیمات محلی هستند؛ پس از اتصال Backend ذخیره سروری اضافه می‌شود.",currency:"قیمت ارز",gold:"قیمت طلا",clock:"ساعت",date:"تاریخ",analyticsdesc:"گزارش واقعی پس از اتصال سرویس‌ها در دسترس خواهد بود.",language:"زبان",theme:"تغییر پوسته",titles:["داشبورد اصلی","اتصال سرور","گروه‌ها","Guard System","خوشامدگویی","ابزارها","گزارش‌ها","تنظیمات"]},
+en:{main:"MAIN",dashboard:"Dashboard",connection:"Server connection",groups:"Groups",security:"PROTECTION",welcome:"Welcome",tools:"Tools",analytics:"Analytics",settings:"Settings",ready:"Frontend is ready",hero:"Management and security center for Rubika groups. Live connection will be enabled after backend setup.",connect:"Configure connection",bot:"Bot status",violations:"Violations",messages:"Messages checked",infra:"Infrastructure",quick:"Quick access",quickdesc:"Project settings",guardsettings:"Guard settings",connecttitle:"Backend connection",test:"Test connection",mygroups:"My groups",refresh:"Refresh groups",groupconfig:"Group settings",guarddesc:"These options are stored in this browser only until the backend is connected.",punishment:"Warning policy",warncount:"Warnings before action",action:"Action after repeat",welcometitle:"Join and leave messages",welcomeMsg:"Welcome message",byeMsg:"Leave message",save:"Save",localonly:"Settings are local for now. Server storage will be added after backend connection.",currency:"Currency prices",gold:"Gold prices",clock:"Clock",date:"Date",analyticsdesc:"Live analytics will be available after services are connected.",language:"Language",theme:"Change theme",titles:["Dashboard","Server connection","Groups","Guard System","Welcome","Tools","Analytics","Settings"]}
+};
+let lang=localStorage.getItem("hiradLang")||"fa",apiKey="";
+function toast(s){$("toast").textContent=s;$("toast").style.display="block";setTimeout(()=>$("toast").style.display="none",2800)}
+function page(id,btn){document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));$(id).classList.add("active");document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));if(btn)btn.classList.add("active");let ids=["dashboard","connection","groups","guard","welcome","tools","analytics","settings"];$("title").textContent=T[lang].titles[ids.indexOf(id)];$("sidebar").classList.remove("open")}
+function setLang(v){lang=v;localStorage.setItem("hiradLang",v);document.documentElement.lang=v;document.documentElement.dir=v==="fa"?"rtl":"ltr";document.querySelectorAll("[data-t]").forEach(e=>{let k=e.dataset.t;if(T[v][k])e.textContent=T[v][k]});$("lang").value=v;renderGuard();let active=document.querySelector(".page.active").id;page(active,document.querySelector('[data-page="'+active+'"]'))}
+function language(){setLang(lang==="fa"?"en":"fa")}
+function theme(){document.body.classList.toggle("light");localStorage.setItem("hiradTheme",document.body.classList.contains("light")?"light":"dark")}
+if(localStorage.getItem("hiradTheme")==="light")document.body.classList.add("light");
+function renderGuard(){let saved=JSON.parse(localStorage.getItem("hiradGuard")||"{}");$("guardList").innerHTML=keys.map((k,i)=>`<div class="row"><span>${names[lang][i]}</span><input class="switch" type="checkbox" data-key="${k}" ${saved[k]?"checked":""}></div>`).join("")}
+function saveGuard(){let o={};document.querySelectorAll("#guardList input").forEach(x=>o[x.dataset.key]=x.checked);localStorage.setItem("hiradGuard",JSON.stringify(o));toast("Saved")}
+function savePolicy(){localStorage.setItem("hiradPolicy",JSON.stringify({warnings:$("warnCount").value,action:$("action").value}));toast("Saved")}
+function saveWelcome(){localStorage.setItem("hiradWelcome",$("welcomeText").value);localStorage.setItem("hiradBye",$("byeText").value);toast("Saved")}
+function base(){return $("apiUrl").value.trim().replace(/\/+$/,"")}
+async function request(path,opts={}){let h={"Content-Type":"application/json"};if(apiKey)h.Authorization="Bearer "+apiKey;let r=await fetch(base()+path,{...opts,headers:{...h,...opts.headers}});let d=await r.json().catch(()=>({}));if(!r.ok)throw Error(d.detail||"HTTP "+r.status);return d}
+async function checkApi(){apiKey=$("apiKey").value.trim();try{let r=await fetch(base()+"/api/health");if(!r.ok)throw Error("HTTP "+r.status);let d=await r.json();$("apiResult").textContent="Backend OK • "+d.version;$("backendState").textContent="Online";toast("Connected");try{let s=await request("/api/summary");$("groupCount").textContent=s.groups??0}catch(e){}}catch(e){$("apiResult").textContent="Connection failed: "+e.message;$("backendState").textContent="Offline"}}
+async function loadGroup(){let id=$("groupId").value.trim();if(!id)return toast("Enter Group ID");try{let d=await request("/api/groups/"+encodeURIComponent(id)+"/settings");$("groupJson").value=JSON.stringify(d.settings||{},null,2);toast("Loaded")}catch(e){toast(e.message)}}
+async function saveGroup(){let id=$("groupId").value.trim();if(!id)return toast("Enter Group ID");try{let settings=JSON.parse($("groupJson").value||"{}");await request("/api/groups/"+encodeURIComponent(id)+"/settings",{method:"PUT",body:JSON.stringify({settings})});toast("Saved on server")}catch(e){toast(e.message)}}
+async function getGroups(){try{let d=await request("/api/groups");$("groupList").textContent=JSON.stringify(d.groups||[])}catch(e){$("groupList").textContent=e.message}}
+function clock(){let n=new Date();$("clock").textContent=n.toLocaleTimeString(lang==="fa"?"fa-IR":"en-US");$("date").textContent=n.toLocaleDateString(lang==="fa"?"fa-IR":"en-US")}
+setLang(lang);let p=JSON.parse(localStorage.getItem("hiradPolicy")||'{"warnings":"3","action":"temporary"}');$("warnCount").value=p.warnings;$("action").value=p.action;
+if(localStorage.getItem("hiradWelcome"))$("welcomeText").value=localStorage.getItem("hiradWelcome");if(localStorage.getItem("hiradBye"))$("byeText").value=localStorage.getItem("hiradBye");
+clock();setInterval(clock,1000);
+</script>
+</body>
+</html>
