@@ -1,12 +1,20 @@
+# secrets and local config - never commit
 .env
 .env.*
 !.env.example
+.dev.vars
+.dev.vars.*
+worker/.dev.vars
+# tooling
+node_modules/
+.wrangler/
+_site/
+# legacy FastAPI backend artifacts
 __pycache__/
 *.py[cod]
 *.db
 *.sqlite
 *.sqlite3
-backend/data/
 .venv/
 venv/
 .DS_Store
