@@ -1,0 +1,18 @@
+# HIRAD ROBOT PANEL - Cloudflare Worker configuration (no secrets in this file).
+name = "hirad-robot-panel"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+[vars]
+# Exact origin of the GitHub Pages site (no path, no trailing slash). Comma-separate for more.
+ALLOWED_ORIGINS = "https://hirad1222.github.io"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "hirad-robot-panel"
+# database_id is filled in by the deploy workflow (it is not secret, but it is account-specific).
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
+migrations_dir = "migrations"
+
+# Secrets (set in Cloudflare, never here): ADMIN_PASSWORD, SESSION_SECRET, TOKEN_ENC_KEY,
+# and optionally RUBIKA_BOT_TOKEN.
